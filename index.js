@@ -1,8 +1,42 @@
 const fs = require("fs");
 const http = require("http");
+const url = require("url");
+
+const about = fs.readFileSync("./html/about.html", "utf-8");
+
+const login = fs.readFileSync("./html/login.html", "utf-8");
+
+const contact = fs.readFileSync("./html/contact.html", "utf-8");
+
+const home = fs.readFileSync("./html/home.html", "utf-8");
 
 const server = http.createServer((req, res) => {
-  res.end("urre server ishladi");
+  const arr = req.url;
+  if (arr === "/contact") {
+    res.writeHead(200, {
+      "content-type": "text/html",
+      "mening-headrim": "zo'r ishladi",
+    });
+    res.end(contact);
+  } else if (arr === "/login") {
+    res.writeHead(200, {
+      "content-type": "text/html",
+      "mening-headrim": "zo'r ishladi",
+    });
+    res.end(login);
+  } else if (arr === "/home") {
+    res.writeHead(200, {
+      "content-type": "text/html",
+      "mening-headrim": "zo'r ishladi",
+    });
+    res.end(home);
+  } else if (arr === "/about") {
+    res.writeHead(200, {
+      "content-type": "text/html",
+      "mening-headrim": "zo'r ishladi",
+    });
+    res.end(about);
+  }
 });
 
 server.listen("8000", "127.0.0.1");
