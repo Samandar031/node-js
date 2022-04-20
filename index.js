@@ -84,6 +84,8 @@ let card = fs.readFileSync("./templates/card.html", "utf-8");
 let output = overview.replace("{CardHtml}", card);
 const dataD = fs.readFileSync("./dev-data/data.json", "utf-8");
 
+let product = fs.readFileSync("./templates/product.html");
+
 let dataObj = JSON.parse(dataD);
 // console.log(typeof dataD);
 
@@ -92,7 +94,10 @@ const repleceFunc = function (html, obj) {
   out = out.replace("{NameProduct}", obj.productName);
   out = out.replace("{DetailProduct}", obj.quantity);
   out = out.replace("{PriceProduct}", obj.price);
+  out = out.replace("{VitaminProduct}", obj.nutrients);
   out = out.replace("{IdProduct}", obj.id);
+  out = out.replace("{CountryProduct}", obj.nutrients);
+  out = out.replace("DescriptionProduct", obj.description);
   out = out.replace("{OrganicProduct}", obj.organic ? "Organic" : "");
   return out;
 };
@@ -105,6 +110,10 @@ const server = http.createServer((req, res) => {
     .join("");
 
   let urlcha = req.url;
+
+  let query = url.parse(urlcha, true).query.id;
+  console.log(query);
+
   let output = overview.replace("{CardHtml}", changeCard);
   if (urlcha === "/overview") {
     res.writeHead(200, {
@@ -112,6 +121,19 @@ const server = http.createServer((req, res) => {
       "mening-headrim": "zo'r ishladi",
     });
     res.end(output);
+  } else if (urlcha === `product?id=${query}`) {
+    let objs = +dataObj.find((val) => val.id === query);
+    let productHtml = repleceFunc(product, objs);
+
+    res.writeHead(200, {
+      "content-type": "text/html",
+    });
+    res.end(productHtml);
+  } else {
+    res.writeHead(404, {
+      "content-type": "text/html",
+    });
+    res.end("<h1 style='color:red'> 404 Error</h1>");
   }
 });
 
