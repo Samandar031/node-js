@@ -2,7 +2,7 @@ const fs = require("fs");
 const http = require("http");
 const url = require("url");
 
-const data = fs.readFileSync("./dev-data/data.json");
+// const data = fs.readFileSync("./dev-data/data.json");
 
 // const about = fs.readFileSync("./html/about.html", "utf-8");
 
@@ -78,20 +78,41 @@ const data = fs.readFileSync("./dev-data/data.json");
 //   console.log(data);
 // });
 
-// const dataD = fs.readFileSync("./dev-data/data.json", "utf-8");
+let overview = fs.readFileSync("./templates/overview.html", "utf-8");
+let card = fs.readFileSync("./templates/card.html", "utf-8");
 
-// const server = http.createServer((req, res) => {
-//   let obj = req.url;
+let output = overview.replace("{CardHtml}", card);
+const dataD = fs.readFileSync("./dev-data/data.json", "utf-8");
 
-//   if (obj === "/json") {
-//     res.writeHead(200, {
-//       "content-type": "text/json",
-//       "mening-headrim": "bu qism jsonni chiqaryapdi",
-//     });
-//     res.end(dataD);
-//   } else {
-//     res.end("bunday api yo'q");
-//   }
-// });
+let dataObj = JSON.parse(dataD);
+// console.log(typeof dataD);
 
-// server.listen("8000", "127.0.0.1");
+const repleceFunc = function (html, obj) {
+  let out = html.replace("{ImageProduct}", obj.image);
+  out = out.replace("{NameProduct}", obj.productName);
+  out = out.replace("{DetailProduct}", obj.quantity);
+  out = out.replace("{PriceProduct}", obj.price);
+  out = out.replace("{IdProduct}", obj.id);
+  out = out.replace("{OrganicProduct}", obj.organic ? "Organic" : "");
+  return out;
+};
+
+const server = http.createServer((req, res) => {
+  const changeCard = dataObj
+    .map((val) => {
+      return repleceFunc(card, val);
+    })
+    .join("");
+
+  let urlcha = req.url;
+  let output = overview.replace("{CardHtml}", changeCard);
+  if (urlcha === "/overview") {
+    res.writeHead(200, {
+      "content-type": "text/html",
+      "mening-headrim": "zo'r ishladi",
+    });
+    res.end(output);
+  }
+});
+
+server.listen("8000", "127.0.0.1");
