@@ -2,6 +2,8 @@ const fs = require("fs");
 const http = require("http");
 const url = require("url");
 const slugify = require("slugify");
+const slugy = slugify("salom qalaysiz");
+console.log(slugy);
 
 // const data = fs.readFileSync("./dev-data/data.json");
 
@@ -114,6 +116,7 @@ const server = http.createServer((req, res) => {
     let objs = dataObj.find((val) => val.id == query);
 
     let productHtml = repleceFunc(product, objs);
+    req.url = slugify(objs.productName);
 
     res.writeHead(200, {
       "content-type": "text/html",
@@ -128,6 +131,3 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen("8000", "127.0.0.1");
-
-const slugy = slugify("salom qalaysiz");
-console.log(slugy);
