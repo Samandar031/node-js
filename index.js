@@ -126,7 +126,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(404, {
       "content-type": "text/html",
     });
-    res.end("<h1 style='color:red'> 404 Error</h1>");
+    res.end(
+      "<h1 style='color:red'> 404 Error</h1><h1 style='color:red'> 404 Error</h1>"
+    );
   }
 });
 
