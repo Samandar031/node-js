@@ -1,6 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+const slugify = require("slugify");
 
 // const data = fs.readFileSync("./dev-data/data.json");
 
@@ -84,23 +85,12 @@ let card = fs.readFileSync("./templates/card.html", "utf-8");
 let output = overview.replace("{CardHtml}", card);
 const dataD = fs.readFileSync("./dev-data/data.json", "utf-8");
 
-let product = fs.readFileSync("./templates/product.html");
+let product = fs.readFileSync("./templates/product.html", "utf-8");
+
+const repleceFunc = require("./module/ReplaceFunction.js");
 
 let dataObj = JSON.parse(dataD);
 // console.log(typeof dataD);
-
-const repleceFunc = function (html, obj) {
-  let out = html.replace("{ImageProduct}", obj.image);
-  out = out.replace("{NameProduct}", obj.productName);
-  out = out.replace("{DetailProduct}", obj.quantity);
-  out = out.replace("{PriceProduct}", obj.price);
-  out = out.replace("{VitaminProduct}", obj.nutrients);
-  out = out.replace("{IdProduct}", obj.id);
-  out = out.replace("{CountryProduct}", obj.nutrients);
-  out = out.replace("DescriptionProduct", obj.description);
-  out = out.replace("{OrganicProduct}", obj.organic ? "Organic" : "");
-  return out;
-};
 
 const server = http.createServer((req, res) => {
   const changeCard = dataObj
@@ -111,8 +101,7 @@ const server = http.createServer((req, res) => {
 
   let urlcha = req.url;
 
-  let query = url.parse(urlcha, true).query.id;
-  console.log(query);
+  let query = +url.parse(urlcha, true).query.id;
 
   let output = overview.replace("{CardHtml}", changeCard);
   if (urlcha === "/overview") {
@@ -121,8 +110,9 @@ const server = http.createServer((req, res) => {
       "mening-headrim": "zo'r ishladi",
     });
     res.end(output);
-  } else if (urlcha === `product?id=${query}`) {
-    let objs = +dataObj.find((val) => val.id === query);
+  } else if (urlcha == `/product?id=${query}`) {
+    let objs = dataObj.find((val) => val.id == query);
+
     let productHtml = repleceFunc(product, objs);
 
     res.writeHead(200, {
@@ -138,3 +128,6 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen("8000", "127.0.0.1");
+
+const slugy = slugify("salom qalaysiz");
+console.log(slugy);
