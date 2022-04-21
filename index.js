@@ -71,8 +71,8 @@ console.log(slugy);
 //   console.log("filega malumotlarni ja yozildi");
 // });
 
-// const read = fs.readFileSync("./txt/append.txt", "utf-8");
-// console.log(read);
+const read = fs.readFileSync("./txt/append.txt", "utf-8");
+console.log(read);
 
 const red = fs.readFileSync("./txt/final.txt");
 
