@@ -74,12 +74,12 @@ console.log(slugy);
 // const read = fs.readFileSync("./txt/append.txt", "utf-8");
 // console.log(read);
 
-// const red = fs.readFileSync("./txt/final.txt");
+const red = fs.readFileSync("./txt/final.txt");
 
-// fs.writeFileSync("./txt/append.txt", red, "utf-8", function (err, data) {
-//   console.log(err);
-//   console.log(data);
-// });
+fs.writeFileSync("./txt/append.txt", red, "utf-8", function (err, data) {
+  console.log(err);
+  console.log(data);
+});
 
 let overview = fs.readFileSync("./templates/overview.html", "utf-8");
 let card = fs.readFileSync("./templates/card.html", "utf-8");
